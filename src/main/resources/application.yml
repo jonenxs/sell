@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: Q1451619620a
+    url: jdbc:mysql://rm-uf6e9nw926b6h4e29o.mysql.rds.aliyuncs.com/sell?characterEncoding=utf-8&useSSl=fasle
+  jpa:
+    show-sql: true
+  jackson:
+    default-property-inclusion: non_null
+server:
+  context-path: /sell
+#logging:
+#  pattern:
+#    console: "%d - %msg%n"
+#  file: F:\log\tomcat\sell.log
+#  level:
+#    com.nxs.sell.LoggerTest: debug
+#  level: debug
+#  path: F:\log\tomcat
+wechat:
+  mpAppId: wx59f17109e9454f26
+  mpAppSecret: cae3488fbd5d84a77a97545568383e67
+  mpAppToken: nxs
+  mpAppEncodingAESKey: wX8mSntzyE8TNz6cAfHsre03Y80QxODul0Ytsj9OXGq
+  mchId: 1465779702
+  mchKey: ef4d467956fb41fd8fe3b2a6083fe197
+  keyPath: /apiclient_cert.p12
+  notifyUrl: http://nxs.s1.natapp.cc/sell/pay/notify
