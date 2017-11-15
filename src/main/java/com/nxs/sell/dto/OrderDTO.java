@@ -1,10 +1,12 @@
 package com.nxs.sell.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nxs.sell.dataobject.OrderDetail;
 import com.nxs.sell.enums.OrderStatusEnum;
 import com.nxs.sell.enums.PayStatusEnum;
+import com.nxs.sell.utils.EnumUtil;
 import com.nxs.sell.utils.serializer.Date2LongSerializer;
 import lombok.Data;
 
@@ -84,4 +86,14 @@ public class OrderDTO {
      * 订单详情
      */
     private List<OrderDetail> orderDetailList;
+
+    @JsonIgnore
+    public OrderStatusEnum getOrderStatusEnum(){
+        return EnumUtil.getByCode(orderStatus, OrderStatusEnum.class);
+    }
+
+    @JsonIgnore
+    public PayStatusEnum getPayStatusEnum(){
+        return EnumUtil.getByCode(payStatus, PayStatusEnum.class);
+    }
 }

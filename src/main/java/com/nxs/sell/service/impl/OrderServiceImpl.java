@@ -13,6 +13,7 @@ import com.nxs.sell.exception.SellException;
 import com.nxs.sell.repository.OrderDetailRepository;
 import com.nxs.sell.repository.OrderMasterRepository;
 import com.nxs.sell.service.OrderService;
+import com.nxs.sell.service.PayService;
 import com.nxs.sell.service.ProductService;
 import com.nxs.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private PayService payService;
 
     @Override
     @Transactional
@@ -115,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDTO> orderDTOList = OrderMaster2OrderDtoConverter
                 .convert(orderMasterPage.getContent());
 
-        Page<OrderDTO> orderDTOPage = new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
+        Page<OrderDTO> orderDTOPage = new PageImpl<>(orderDTOList,pageable,orderMasterPage.getTotalElements());
         return orderDTOPage;
     }
 
@@ -148,8 +152,10 @@ public class OrderServiceImpl implements OrderService {
 
         //如果已支付，需要退款
         if (orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())) {
-            //TODO
+            payService.refund(orderDTO);
         }
+
+
         return orderDTO;
     }
 
@@ -196,5 +202,15 @@ public class OrderServiceImpl implements OrderService {
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
         return orderDTO;
+    }
+
+    @Override
+    public Page<OrderDTO> findList(Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findAll(pageable);
+        List<OrderDTO> orderDTOList = OrderMaster2OrderDtoConverter
+                .convert(orderMasterPage.getContent());
+
+        Page<OrderDTO> orderDTOPage = new PageImpl<>(orderDTOList,pageable,orderMasterPage.getTotalElements());
+        return orderDTOPage;
     }
 }
