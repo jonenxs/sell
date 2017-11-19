@@ -12,9 +12,7 @@ import com.nxs.sell.enums.ResultEnum;
 import com.nxs.sell.exception.SellException;
 import com.nxs.sell.repository.OrderDetailRepository;
 import com.nxs.sell.repository.OrderMasterRepository;
-import com.nxs.sell.service.OrderService;
-import com.nxs.sell.service.PayService;
-import com.nxs.sell.service.ProductService;
+import com.nxs.sell.service.*;
 import com.nxs.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -54,6 +52,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PayService payService;
 
+    @Autowired
+    private PushMessageService pushMessageService;
+
+    @Autowired
+    private WebSocket webSocket;
+
     @Override
     @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
@@ -90,6 +94,9 @@ public class OrderServiceImpl implements OrderService {
         List<CartDTO> cartDTOList = orderDTO.getOrderDetailList().stream().map(e ->
                 new CartDTO(e.getProductId(), e.getProductQuantity())).collect(Collectors.toList());
         productService.decreaseStock(cartDTOList);
+
+        //5.发送websocket消息
+        webSocket.sendMessage(orderDTO.getOrderId());
 
         return orderDTO;
     }
@@ -176,6 +183,10 @@ public class OrderServiceImpl implements OrderService {
             log.error("[完结订单]更新失败，orderMaster={}", orderMaster);
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
+
+        //推送模板消息
+        pushMessageService.orderStatus(orderDTO);
+
         return orderDTO;
     }
 
