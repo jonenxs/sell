@@ -38,3 +38,9 @@ projectUrl:
   wechatMpAuthorize:  http://nxs.s1.natapp.cc
   wxchatOpenAuthorize:  http://nxs.s1.natapp.cc
   sell: http://nxs.s1.natapp.cc
+logging:
+  level:
+    com.nxs.sell.repository.mapper: trace
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+

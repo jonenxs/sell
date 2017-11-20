@@ -1,6 +1,7 @@
 package com.nxs.sell.exception;
 
 import com.nxs.sell.enums.ResultEnum;
+import lombok.Getter;
 
 /**
  * ${DESCRIPTION}
@@ -8,8 +9,10 @@ import com.nxs.sell.enums.ResultEnum;
  * @author
  * @create 2017-09-11 23:27
  **/
+@Getter
 public class SellException extends RuntimeException {
-    public Integer code;
+
+    private Integer code;
 
     public SellException(ResultEnum resultEnum) {
         super(resultEnum.getMessage());
