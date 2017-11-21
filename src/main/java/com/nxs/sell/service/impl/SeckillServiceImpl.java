@@ -36,7 +36,7 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
     @Override
-    public void orderProductMockDiffUser(String productId) {
+    public synchronized void orderProductMockDiffUser(String productId) {
         //1.查询该商品库存，为0 则活动结束
         int stockNum = stock.get(productId);
         if (stockNum == 0) {

@@ -2,7 +2,6 @@ package com.nxs.sell.aspect;
 
 import com.nxs.sell.constant.CookieConstant;
 import com.nxs.sell.constant.RedisConstant;
-import com.nxs.sell.exception.SellException;
 import com.nxs.sell.exception.SellerAuthorizeException;
 import com.nxs.sell.utils.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 卖家端权限认证切面
+ */
 @Aspect
 @Component
 @Slf4j
@@ -32,7 +33,7 @@ public class SellerAuthorizeAspect {
     "&& !execution(public * com.nxs.sell.controller.SellerUserController.*(..))")
     public void verify(){}
 
-    @Before("verify()")
+//    @Before("verify()")
     public void doVerify(){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();

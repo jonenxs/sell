@@ -21,14 +21,14 @@ public class WebSocket {
     private static CopyOnWriteArraySet<WebSocket> webSocketSet = new CopyOnWriteArraySet<>();
 
     @OnOpen
-    private void onOpen(Session session) {
+    public void onOpen(Session session) {
         this.session = session;
         webSocketSet.add(this);
         log.info("【websocket消息】有新的连接，总数：{}",webSocketSet.size());
     }
 
     @OnClose
-    private void OnClose(Session session) {
+    public void OnClose(Session session) {
         webSocketSet.remove(this);
         log.info("【websocket消息】连接断开，总数：{}",webSocketSet.size());
     }
