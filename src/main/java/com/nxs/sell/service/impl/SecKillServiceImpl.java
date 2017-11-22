@@ -1,15 +1,22 @@
 package com.nxs.sell.service.impl;
 
 import com.nxs.sell.exception.SellException;
-import com.nxs.sell.service.SeckillService;
+import com.nxs.sell.service.RedisLock;
+import com.nxs.sell.service.SecKillService;
 import com.nxs.sell.utils.KeyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class SeckillServiceImpl implements SeckillService {
+public class SecKillServiceImpl implements SecKillService {
+
+    private static final int TIMEOUT = 10 * 1000; //超时时间
+
+    @Autowired
+    private RedisLock redisLock;
 
     static Map<String,Integer> products;
     static Map<String,Integer> stock;
@@ -36,7 +43,12 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
     @Override
-    public synchronized void orderProductMockDiffUser(String productId) {
+    public void orderProductMockDiffUser(String productId) {
+        //加锁
+        long time = System.currentTimeMillis() + TIMEOUT;
+        if (redisLock.lock(productId, String.valueOf(time))) {
+            throw new SellException(101,"哎呦喂，人也太多了，换个姿势再试试！")
+        }
         //1.查询该商品库存，为0 则活动结束
         int stockNum = stock.get(productId);
         if (stockNum == 0) {
@@ -53,5 +65,8 @@ public class SeckillServiceImpl implements SeckillService {
             }
             stock.put(productId, stockNum);
         }
+
+        //解锁
+        redisLock.unlock(productId,String.valueOf(time));
     }
 }

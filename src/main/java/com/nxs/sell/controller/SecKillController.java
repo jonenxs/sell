@@ -1,6 +1,6 @@
 package com.nxs.sell.controller;
 
-import com.nxs.sell.service.SeckillService;
+import com.nxs.sell.service.SecKillService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SecKillController {
 
     @Autowired
-    private SeckillService seckillService;
+    private SecKillService secKillService;
 
     /**
      * 查询秒杀活动的信息
@@ -24,7 +24,7 @@ public class SecKillController {
      */
     @GetMapping("/query/{productId}")
     public String query(@PathVariable String productId)throws Exception {
-        return seckillService.querySecKillProductInfo(productId);
+        return secKillService.querySecKillProductInfo(productId);
     }
 
     /**
@@ -36,7 +36,7 @@ public class SecKillController {
     @GetMapping("/order/{productId}")
     public String skill(@PathVariable String productId) throws Exception {
         log.info("@skill request,productId:" + productId);
-        seckillService.orderProductMockDiffUser(productId);
-        return seckillService.querySecKillProductInfo(productId);
+        secKillService.orderProductMockDiffUser(productId);
+        return secKillService.querySecKillProductInfo(productId);
     }
 }
