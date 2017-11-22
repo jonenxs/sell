@@ -47,7 +47,7 @@ public class SecKillServiceImpl implements SecKillService {
         //加锁
         long time = System.currentTimeMillis() + TIMEOUT;
         if (redisLock.lock(productId, String.valueOf(time))) {
-            throw new SellException(101,"哎呦喂，人也太多了，换个姿势再试试！")
+            throw new SellException(101, "哎呦喂，人也太多了，换个姿势再试试！");
         }
         //1.查询该商品库存，为0 则活动结束
         int stockNum = stock.get(productId);
